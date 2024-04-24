@@ -1,8 +1,64 @@
 <odoo>
     <data>
+        <record id="hms_patient_form_view" model="ir.ui.view">
+            <field name="name">Patient Form View</field>
+            <field name="model">hms.patient</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
 
+                        <group string="Basic Info">
+                            <field name="f_name"/>
+                            <field name="l_name"/>
+                            <field name="birth_date"/>
+                            <field name="age"/>
+                            <field name="address"/>
+                            <field name="history"/>
+                        </group>
+
+                        <group string="Additional Info">
+                            <field name="pcr"/>
+                            <field name="cr_ratio" attrs="{'required' : [('pcr', '=', True)]}"/>
+                            <field name="blood_type"/>
+                            <field name="department_id" domain="[('is_opened', '=', True)]"/>
+                            <field name="department_capacity"/>
+                            <field name="doctors_ids" widget="many2many_tags" attrs="{'readonly : [('department_id', '=', False)]'}"/>
+                        </group>
+
+                        <notebook>
+                            <page string="HISTORY LOG">
+                                <field name="log_history_ids" attrs="{'invisible': [('age', '&lt;', 50)]}">
+                                    <!--View on the fly-->
+                                    <tree>
+                                        <field name="patient_id" string="Created by" readonly="True"/>
+                                        <field name="current_date" string="Date" readonly="True"/>
+                                        <field name="description" string="Description"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </group>
+                </form>
+            </field>
+
+        </record>
+        <!--create patient Tree view-->
+        <record id="hms_patient_tree_view" model="ir.ui.view">
+            <field name="name">Patient Tree View</field>
+            <field name="model">hms.patient</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="f_name"/>
+                    <field name="l_name"/>
+                    <field name="age"/>
+                    <field name="image"/>
+                </tree>
+            </field>
+
+        </record>
         <record id="hms_patient_action" model="ir.actions.act_window">
-            <field name="name">Patient Action</field>
+            <field name="name">Patients</field>
             <field name="res_model">hms.patient</field>
         </record>
 
