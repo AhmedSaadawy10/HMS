@@ -5,40 +5,50 @@
             <field name="model">hms.patient</field>
             <field name="arch" type="xml">
                 <form>
-                    <group>
+                    <header string="Select Your State">
+                        <button type="object" name="undetermined" string="Undetermined"/>
+                        <button type="object" name="good" string="Good"/>
+                        <button type="object" name="fair" string="Fair"/>
+                        <button type="object" name="serious" string="Serious"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="Basic Info">
+                                <field name="f_name"/>
+                                <field name="l_name"/>
+                                <field name="email"/>
+                                <field name="birth_date"/>
+                                <field name="age"/>
+                                <field name="address"/>
+                                <field name="history"/>
+                            </group>
 
-                        <group string="Basic Info">
-                            <field name="f_name"/>
-                            <field name="l_name"/>
-                            <field name="birth_date"/>
-                            <field name="age"/>
-                            <field name="address"/>
-                            <field name="history"/>
+                            <group string="Additional Info">
+                                <field name="state"/>
+                                <field name="pcr"/>
+                                <field name="cr_ratio" attrs="{'required' : [('pcr', '=', True)]}"/>
+                                <field name="blood_type"/>
+                                <field name="department_id" domain="[('is_opened', '=', True)]"/>
+                                <field name="department_capacity"/>
+                                <field name="doctors_ids" widget="many2many_tags" attrs="{'readonly' : [('department_id', '=', False)]}"/>
+                            </group>
+
+                            <notebook>
+                                <page string="HISTORY LOG">
+                                    <field name="log_history_ids">
+                                        <!--View on the fly-->
+                                        <tree>
+                                            <field name="patient_id" string="Created by" readonly="True"/>
+                                            <field name="current_date" string="Date" readonly="True"/>
+                                            <field name="description" string="Description"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+
                         </group>
-
-                        <group string="Additional Info">
-                            <field name="pcr"/>
-                            <field name="cr_ratio" attrs="{'required' : [('pcr', '=', True)]}"/>
-                            <field name="blood_type"/>
-                            <field name="department_id" domain="[('is_opened', '=', True)]"/>
-                            <field name="department_capacity"/>
-                            <field name="doctors_ids" widget="many2many_tags" attrs="{'readonly : [('department_id', '=', False)]'}"/>
-                        </group>
-
-                        <notebook>
-                            <page string="HISTORY LOG">
-                                <field name="log_history_ids" attrs="{'invisible': [('age', '&lt;', 50)]}">
-                                    <!--View on the fly-->
-                                    <tree>
-                                        <field name="patient_id" string="Created by" readonly="True"/>
-                                        <field name="current_date" string="Date" readonly="True"/>
-                                        <field name="description" string="Description"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
-
-                    </group>
+                    </sheet>
                 </form>
             </field>
 
